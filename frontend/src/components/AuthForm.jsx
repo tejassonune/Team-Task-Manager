@@ -1,14 +1,17 @@
-import { useState } from 'react';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function AuthForm({ onSubmit, isRegister }) {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     try {
       if (isRegister) {
         await onSubmit(name, email, password);
@@ -16,17 +19,31 @@ export default function AuthForm({ onSubmit, isRegister }) {
         await onSubmit(email, password);
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'An error occurred');
+      setError(err.response?.data?.message || "An error occurred");
     }
   };
 
+  const handleSignup = () => {
+    navigate("/register");
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-16 p-8 bg-white rounded-lg shadow-md">
-      <h2 className="text-3xl font-semibold mb-8 text-center">{isRegister ? 'Register' : 'Login'}</h2>
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-md mx-auto mt-16 p-8 bg-white rounded-lg shadow-md"
+    >
+      <h2 className="text-3xl font-semibold mb-8 text-center">
+        {isRegister ? "Register" : "Login"}
+      </h2>
 
       {isRegister && (
         <div className="mb-6">
-          <label htmlFor="name" className="block mb-2 font-medium text-gray-700">Name</label>
+          <label
+            htmlFor="name"
+            className="block mb-2 font-medium text-gray-700"
+          >
+            Name
+          </label>
           <input
             id="name"
             type="text"
@@ -40,7 +57,9 @@ export default function AuthForm({ onSubmit, isRegister }) {
       )}
 
       <div className="mb-6">
-        <label htmlFor="email" className="block mb-2 font-medium text-gray-700">Email</label>
+        <label htmlFor="email" className="block mb-2 font-medium text-gray-700">
+          Email
+        </label>
         <input
           id="email"
           type="email"
@@ -53,7 +72,12 @@ export default function AuthForm({ onSubmit, isRegister }) {
       </div>
 
       <div className="mb-6">
-        <label htmlFor="password" className="block mb-2 font-medium text-gray-700">Password</label>
+        <label
+          htmlFor="password"
+          className="block mb-2 font-medium text-gray-700"
+        >
+          Password
+        </label>
         <input
           id="password"
           type="password"
@@ -72,8 +96,18 @@ export default function AuthForm({ onSubmit, isRegister }) {
         type="submit"
         className="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition"
       >
-        {isRegister ? 'Register' : 'Login'}
+        {isRegister ? "Register" : "Login"}
       </button>
+
+      <div className="mt-4 text-center">
+        <button
+          type="button"
+          className="py-2 text-blue-600 hover:underline"
+          onClick={handleSignup}
+        >
+          New? Create an account
+        </button>
+      </div>
     </form>
   );
 }
